@@ -30,7 +30,7 @@ const hlsjsDefaults = {
   debug: true,
   enableWorker: true,
   lowLatencyMode: true,
-  backBufferLength: 60 * 1.5,
+  backBufferLength: 90,
 };
 
 let enableStreaming = getDemoConfigPropOrDefault('enableStreaming', true);
@@ -52,6 +52,7 @@ let lastDuration;
 let lastAudioTrackSwitchingIdx;
 let hls;
 let url;
+let authToken;
 let events;
 let stats;
 let tracks;
@@ -300,6 +301,8 @@ function loadSelectedStream() {
     return;
   }
 
+  authToken = $('#authorization').val();
+  console.info('AuthToken: ', authToken);
   url = $('#streamURL').val();
 
   setupGlobals();
@@ -320,7 +323,11 @@ function loadSelectedStream() {
 
   // Extending both a demo-specific config and the user config which can override all
   const hlsConfig = $.extend(
-    {},
+    {
+      xhrSetup: function (xhr, url) {
+        xhr.setRequestHeader('Authorization', authToken);
+      },
+    },
     hlsjsDefaults,
     getEditorValue({ parse: true })
   );

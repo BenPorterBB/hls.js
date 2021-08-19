@@ -197,6 +197,7 @@ select option {
   overflow: auto;
 }
 
+#authorization,
 #streamURL,
 #streamSelect {
   width: calc(100% - 4px);
